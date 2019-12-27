@@ -43,6 +43,7 @@ class DoubleClock(object):
   _STATE_ALARM   = 4
   _BUZZ_WARN     = (0.25,1)                # (duration,repeat)
   _BUZZ_ALARM    = [(0.25,20),(0.5,-1)]    # second alarm runs indefinitely
+  _BRIGHTNESS    = 7                       # maximum brightness
   
   # --- constructor   --------------------------------------------------------
 
@@ -225,9 +226,13 @@ class DoubleClock(object):
         for i in [0,1]:
           (m,s) = divmod(abs(self._secs[i]),60)
           self._clocks[i].numbers(m,s)
+          if not self._secs[i]:
+            # timer reached zero, so dim display
+            self._clocks[i].brightness(0)
       else:
         # update using self._values
         for i in [0,1]:
+          self._clocks[i].brightness(DoubleClock._BRIGHTNESS)
           # copy array of int to array of strings
           val = [str(self._values[i][j]) for j in range(3,-1,-1)]
           if (self._state == DoubleClock._STATE_SETUP and blink_off and
