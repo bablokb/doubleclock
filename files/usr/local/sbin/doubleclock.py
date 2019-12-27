@@ -166,18 +166,15 @@ class DoubleClock(object):
                          10*self._values[i][1] +    self._values[i][0])
       
       if self._secs[0] + self._secs[1] > 0:
-        print("on_start: starting countdown-thread")
         self._count_ev.clear()
         self._state    = DoubleClock._STATE_RUNNING
         threading.Thread(target=self._count).start()
 
     elif self._state == DoubleClock._STATE_RUNNING:
-      print("on_start: cancelling countdown")
       self._count_ev.set()
       self._state = DoubleClock._STATE_READY
 
     elif self._state == DoubleClock._STATE_ALARM:
-      print("on_start: turning buzzer off")
       # turn off buzzer
       self._buzz_ev.set()
       if self._secs[0] <= 0 and self._secs[1] <= 0:
@@ -203,10 +200,8 @@ class DoubleClock(object):
   # --- ring the buzzer   ----------------------------------------------------
 
   def buzz(self,duration,count=1):
-    print("buzz: Duration: %f, count: %d" % (duration,count))
     if self._buzz_thread:                # buzzer already buzzing
       return
-    print("buzz: starting")
     self._buzz_ev.clear()
     self._buzz_thread = threading.Thread(
       target=self._buzz,args=(duration,count))
@@ -257,7 +252,6 @@ class DoubleClock(object):
   def _buzz(self,duration,count):
     """ passing count=-1 will sound the buffer indefintely """
 
-    print("_buzz: starting. Duration: %f, count: %d" % (duration,count))
     while count != 0:
       GPIO.output(PIN_BUZZER, GPIO.LOW)     # buzzer on
       if self._buzz_ev.wait(duration):      # wait and check for interrupt
@@ -266,7 +260,6 @@ class DoubleClock(object):
       if self._buzz_ev.wait(duration):      # wait and check for interrupt
         break
       count -= 1
-    print("_buzz: finished")
     GPIO.output(PIN_BUZZER, GPIO.HIGH)
     self._buzz_thread = None
 
