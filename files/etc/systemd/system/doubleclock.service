@@ -1,0 +1,22 @@
+# --------------------------------------------------------------------------
+# Systemd service Definition for doubleclock.service.
+#
+# The service starts the script /usr/local/sbin/doubleclock.py
+#
+# Author: Bernhard Bablok
+# License: GPL3
+#
+# Website: https://github.com/bablokb/doubleclock
+#
+# --------------------------------------------------------------------------
+
+[Unit]
+Description=DoubleClock countdown service
+After=multi-user.target
+ 
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/doubleclock.py
+
+[Install]
+WantedBy=multi-user.target
