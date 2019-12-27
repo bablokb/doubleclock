@@ -176,9 +176,6 @@ class DoubleClock(object):
       self._count_ev.set()
       self._state = DoubleClock._STATE_READY
 
-    elif self._state == DoubleClock._STATE_PAUSE:
-      self._state = DoubleClock._STATE_RUNNING
-
     elif self._state == DoubleClock._STATE_ALARM:
       print("on_start: turning buzzer off")
       # turn off buzzer
