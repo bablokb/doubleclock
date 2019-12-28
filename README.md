@@ -21,6 +21,7 @@ The setup uses the following hardware-components:
   - one 5-way button
   - one normal button
   - one slider
+  - one active buzzer
 
 You can find details on the necessary wiring in `doc/specs.md`.
 
