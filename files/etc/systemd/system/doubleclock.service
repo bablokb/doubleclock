@@ -12,11 +12,12 @@
 
 [Unit]
 Description=DoubleClock countdown service
-After=multi-user.target
- 
+After=local-fs.target
+DefaultDependencies=no
+
 [Service]
 Type=simple
 ExecStart=/usr/local/sbin/doubleclock.py
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=local-fs.target
