@@ -52,7 +52,6 @@ in the code (file `doubleclock.py`).
 | left              | 27      |
 | right             | 23      |
 | slider (left)     | 20      |
-| slider (right)    | 21      |
 | start/stop        | 05      |
 | clock (left,clk)  | 06      |
 | clock (left,dio)  | 13      |

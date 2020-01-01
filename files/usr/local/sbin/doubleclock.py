@@ -24,7 +24,6 @@ PIN_DOWN     = 22
 PIN_LEFT     = 27
 PIN_RIGHT    = 23
 PIN_SLIDER_L = 20
-PIN_SLIDER_R = 21
 PIN_START    =  5
 PIN_LCLOCK_C = board.D6
 PIN_LCLOCK_D = board.D13
@@ -67,18 +66,16 @@ class DoubleClock(object):
     GPIO.setup(PIN_LEFT,     GPIO.IN)
     GPIO.setup(PIN_RIGHT,    GPIO.IN)
     GPIO.setup(PIN_SLIDER_L, GPIO.IN,  pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(PIN_SLIDER_R, GPIO.IN,  pull_up_down=GPIO.PUD_UP)
     GPIO.setup(PIN_START,    GPIO.IN,  pull_up_down=GPIO.PUD_UP)
     GPIO.setup(PIN_BUZZER,   GPIO.OUT, initial=GPIO.HIGH)
 
-    GPIO.add_event_detect(PIN_PUSH,   GPIO.FALLING,     self.on_push)
-    GPIO.add_event_detect(PIN_UP,     GPIO.FALLING,       self.on_up)
-    GPIO.add_event_detect(PIN_DOWN,   GPIO.FALLING,     self.on_down)
-    GPIO.add_event_detect(PIN_LEFT,   GPIO.FALLING,     self.on_left)
-    GPIO.add_event_detect(PIN_RIGHT,  GPIO.FALLING,    self.on_right)
-    GPIO.add_event_detect(PIN_SLIDER_L, GPIO.FALLING, self.on_slider)
-    GPIO.add_event_detect(PIN_SLIDER_R, GPIO.FALLING, self.on_slider)
-    GPIO.add_event_detect(PIN_START,  GPIO.FALLING,    self.on_start,200)
+    GPIO.add_event_detect(PIN_PUSH,     GPIO.FALLING,      self.on_push)
+    GPIO.add_event_detect(PIN_UP,       GPIO.FALLING,        self.on_up)
+    GPIO.add_event_detect(PIN_DOWN,     GPIO.FALLING,      self.on_down)
+    GPIO.add_event_detect(PIN_LEFT,     GPIO.FALLING,      self.on_left)
+    GPIO.add_event_detect(PIN_RIGHT,    GPIO.FALLING,     self.on_right)
+    GPIO.add_event_detect(PIN_SLIDER_L, GPIO.BOTH,       self.on_slider)
+    GPIO.add_event_detect(PIN_START,    GPIO.FALLING, self.on_start,200)
 
     self._reset()
 
@@ -196,7 +193,7 @@ class DoubleClock(object):
   # --- process slider   -----------------------------------------------------
 
   def on_slider(self,pin):
-    self._clock_nr = 0 if pin == PIN_SLIDER_L else 1
+    self._clock_nr = GPIO.input(PIN_SLIDER_L)
 
   # --- ring the buzzer   ----------------------------------------------------
 
