@@ -23,6 +23,8 @@ The setup uses the following hardware-components:
   - one slider
   - one active buzzer
 
+![](doc/doubleclock-breadboard.png)
+
 You can find details on the necessary wiring in `doc/specs.md`.
 
 
