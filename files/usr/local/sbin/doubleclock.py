@@ -18,18 +18,19 @@ import RPi.GPIO as GPIO
 
 # --- pin-configuration   ----------------------------------------------------
 
-PIN_PUSH     = 17
-PIN_UP       = 18
-PIN_DOWN     = 22
-PIN_LEFT     = 27
-PIN_RIGHT    = 23
-PIN_SLIDER_L = 20
-PIN_START    =  5
-PIN_LCLOCK_C = board.D6
-PIN_LCLOCK_D = board.D13
-PIN_RCLOCK_C = board.D12
-PIN_RCLOCK_D = board.D16
-PIN_BUZZER   = 26
+PIN_PUSH      = 17
+PIN_UP        = 18
+PIN_DOWN      = 22
+PIN_LEFT      = 27
+PIN_RIGHT     = 23
+PIN_SLIDER_L  = 20
+PIN_START     =  5
+PIN_LCLOCK_C  = board.D6
+PIN_LCLOCK_D  = board.D13
+PIN_RCLOCK_C  = board.D12
+PIN_RCLOCK_D  = board.D16
+PIN_BUZZER    = 26
+PIN_BUZZER_ON = GPIO.LOW                   # change to GPIO.HIGH if necessary
 
 # --- application-class   ----------------------------------------------------
 
@@ -67,7 +68,7 @@ class DoubleClock(object):
     GPIO.setup(PIN_RIGHT,    GPIO.IN)
     GPIO.setup(PIN_SLIDER_L, GPIO.IN,  pull_up_down=GPIO.PUD_UP)
     GPIO.setup(PIN_START,    GPIO.IN,  pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(PIN_BUZZER,   GPIO.OUT, initial=GPIO.HIGH)
+    GPIO.setup(PIN_BUZZER,   GPIO.OUT, initial=1-PIN_BUZZER_ON)
 
     GPIO.add_event_detect(PIN_PUSH,     GPIO.FALLING,      self.on_push)
     GPIO.add_event_detect(PIN_UP,       GPIO.FALLING,        self.on_up)
@@ -255,14 +256,14 @@ class DoubleClock(object):
     """ passing count=-1 will sound the buffer indefintely """
 
     while count != 0:
-      GPIO.output(PIN_BUZZER, GPIO.LOW)     # buzzer on
-      if self._buzz_ev.wait(duration):      # wait and check for interrupt
+      GPIO.output(PIN_BUZZER,PIN_BUZZER_ON)   # buzzer on
+      if self._buzz_ev.wait(duration):        # wait and check for interrupt
         break
-      GPIO.output(PIN_BUZZER, GPIO.HIGH)    # buzzer off
-      if self._buzz_ev.wait(duration):      # wait and check for interrupt
+      GPIO.output(PIN_BUZZER,1-PIN_BUZZER_ON) # buzzer off
+      if self._buzz_ev.wait(duration):        # wait and check for interrupt
         break
       count -= 1
-    GPIO.output(PIN_BUZZER, GPIO.HIGH)
+    GPIO.output(PIN_BUZZER,1-PIN_BUZZER_ON)   # buzzer off
     self._buzz_thread = None
 
   # --- count down the remaining seconds   -----------------------------------
