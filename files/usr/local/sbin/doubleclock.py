@@ -152,13 +152,17 @@ class DoubleClock(object):
 
   def on_start(self,pin):
     if self._state == DoubleClock._STATE_INIT:
+      # not supported, just buzz
       self.buzz(*DoubleClock._BUZZ_WARN)
 
     elif self._state == DoubleClock._STATE_SETUP:
+      # reset digits during setup-mode
       self._reset()
 
     elif self._state == DoubleClock._STATE_READY:
-      # calculate seconds per clock
+      # start alarms
+
+      # calculate seconds per clock ...
       self._secs = [0,0]
       for i in range(2):
         self._secs[i] = (10*60*self._values[i][3] + 60*self._values[i][2] +
@@ -167,9 +171,11 @@ class DoubleClock(object):
       if self._secs[0] + self._secs[1] > 0:
         self._count_ev.clear()
         self._state    = DoubleClock._STATE_RUNNING
+        # ... and start alarm-thread
         threading.Thread(target=self._count).start()
 
     elif self._state == DoubleClock._STATE_RUNNING:
+      # stop countdown and reset to ready-state
       self._count_ev.set()
       self._state = DoubleClock._STATE_READY
 
