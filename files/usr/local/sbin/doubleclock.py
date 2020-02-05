@@ -10,11 +10,14 @@
 #
 # ----------------------------------------------------------------------------
 
-
 import threading, signal, sys, time
 import TM1637
 import board
 import RPi.GPIO as GPIO
+
+# --- file for persistent configuration   ------------------------------------
+
+CONF_FILE = "/root/doubleclock.py"
 
 # --- pin-configuration   ----------------------------------------------------
 
@@ -79,6 +82,7 @@ class DoubleClock(object):
     GPIO.add_event_detect(PIN_START,    GPIO.FALLING, self.on_start,200)
 
     self._reset()
+    self._restore()
 
   # --- reset internal state   -----------------------------------------------
 
@@ -88,12 +92,23 @@ class DoubleClock(object):
     self._dig_nr   = [0,0]                     # current digit-number
     self._clock_nr = GPIO.input(PIN_SLIDER_L)  # current "active" clock
     
+  # --- restore clock-values from persistent storage   -----------------------
+
+  def _restore(self):
+    pass
+
+  # --- save clock-values to persistent storage   ----------------------------
+
+  def _save(self):
+    pass
+
   # --- process set (push)   -------------------------------------------------
 
   def on_push(self,pin):
     if self._state == DoubleClock._STATE_INIT:
       self._state = DoubleClock._STATE_SETUP
     elif self._state == DoubleClock._STATE_SETUP:
+      self._save()
       self._state = DoubleClock._STATE_READY
     elif self._state == DoubleClock._STATE_READY:
       self._state = DoubleClock._STATE_SETUP
