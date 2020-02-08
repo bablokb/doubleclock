@@ -64,6 +64,7 @@ install_files() {
     chown root:root "$target"
   done
   chmod 755 "/usr/local/sbin/$PROJECT.py"
+  chmod 755 "/usr/local/sbin/$PROJECT.mount_helper"
 }
 
 # --- configure system   ----------------------------------------------------
