@@ -41,6 +41,18 @@ to install the software and some prerequisite packages. This will also enable
 a systemd-service so that the clock starts at boot-time.
 
 
+System-Tweaks
+-------------
+
+The clock has no shutdown button, so it is best to configure the system
+as a readonly-system. If you have a dedicated Pi for the clock, just remove
+the lines from `/etc/fstab` which mount `/` and `/boot`.
+
+To speedup boot-time, disable the keyboard-setup.service. Also, add "quiet"
+to `/boot/cmdline.txt`. Of course you have to do this before the system is
+in readonly-mode.
+
+
 Usage
 -----
 
@@ -59,6 +71,7 @@ count.
 In alarm-mode, the start/stop-button will stop the buzzer, but not the second
 running clock. Stopping the second alarm will reset the values to the state
 after the last setup.
+
 
 License
 -------
