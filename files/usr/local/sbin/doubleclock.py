@@ -10,14 +10,14 @@
 #
 # ----------------------------------------------------------------------------
 
-import threading, signal, sys, time
+import threading, signal, sys, time, pickle
 import TM1637
 import board
 import RPi.GPIO as GPIO
 
 # --- file for persistent configuration   ------------------------------------
 
-CONF_FILE = "/root/doubleclock.py"
+CONF_FILE = "/root/doubleclock.data"
 
 # --- pin-configuration   ----------------------------------------------------
 
@@ -95,12 +95,21 @@ class DoubleClock(object):
   # --- restore clock-values from persistent storage   -----------------------
 
   def _restore(self):
-    pass
+    try:
+      with open(CONF_FILE,"rb") as f:
+        self._values = pickle.load(f)
+    except:
+      pass
 
   # --- save clock-values to persistent storage   ----------------------------
 
   def _save(self):
-    pass
+    """ save values - might fail if system is read-only """
+    try:
+      with open(CONF_FILE,"wb") as f:
+        pickle.dump(self._values,f)
+    except:
+      pass
 
   # --- process set (push)   -------------------------------------------------
 
