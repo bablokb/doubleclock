@@ -8,6 +8,10 @@ The *slider* changes between the two clocks. The 5-way button changes the
 clock values. The *start/stop* button starts and stops the countdown and
 turns of the buzzer. A long press of *start/stop* resets both clocks.
 
+Up to four memory buttons save/recall the current values. Pressing a
+memory button while in setup-state will save the values. Pressing the button
+in ready-state will recall the values.
+
 The clocks display a countdown in the format "MM:SS" with MM ranging from
 0-99 and seconds from 0-59.
 
@@ -58,3 +62,7 @@ in the code (file `doubleclock.py`).
 | clock (right,clk) | 12      |
 | clock (right,dio) | 16      |
 | buzzer            | 26      |
+| mem1              | 09      |
+| mem2              | 25      |
+| mem3              | 11      |
+| mem4              | 08      |
