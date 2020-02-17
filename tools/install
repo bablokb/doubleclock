@@ -70,7 +70,7 @@ install_files() {
 # --- configure system   ----------------------------------------------------
 
 configure_system() {
- :
+ mkdir -p "/var/lib/$PROJECT"
 }
 
 # --- activate service   ----------------------------------------------------
@@ -85,7 +85,7 @@ enable_services() {
 install_packages
 
 install_files
-#configure_system
+configure_system
 enable_services
 
 echo "[INFO] installation completed"
