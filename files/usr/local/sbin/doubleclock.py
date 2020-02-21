@@ -10,14 +10,14 @@
 #
 # ----------------------------------------------------------------------------
 
-import threading, signal, sys, time, pickle
+import threading, signal, os, sys, time, pickle
 import TM1637
 import board
 import RPi.GPIO as GPIO
 
 # --- file for persistent configuration   ------------------------------------
 
-CONF_FILE = "/root/doubleclock.data"
+DATA_DIR = "/var/lib/doubleclock"
 
 # --- pin-configuration   ----------------------------------------------------
 
@@ -28,10 +28,17 @@ PIN_LEFT      = 27
 PIN_RIGHT     = 23
 PIN_SLIDER_L  = 20
 PIN_START     =  5
+
+PIN_MEM1      =  9
+PIN_MEM2      = 25
+PIN_MEM3      = 11
+PIN_MEM4      =  8
+
 PIN_LCLOCK_C  = board.D6
 PIN_LCLOCK_D  = board.D13
 PIN_RCLOCK_C  = board.D12
 PIN_RCLOCK_D  = board.D16
+
 PIN_BUZZER    = 26
 PIN_BUZZER_ON = GPIO.LOW                   # change to GPIO.HIGH if necessary
 
@@ -81,6 +88,13 @@ class DoubleClock(object):
     GPIO.add_event_detect(PIN_SLIDER_L, GPIO.BOTH,       self.on_slider)
     GPIO.add_event_detect(PIN_START,    GPIO.FALLING, self.on_start,200)
 
+    GPIO.setup([PIN_MEM1,PIN_MEM2,PIN_MEM3,PIN_MEM4],
+                                       GPIO.IN,pull_up_down=GPIO.PUD_UP)
+    GPIO.add_event_detect(PIN_MEM1,GPIO.FALLING, self.on_mem,200)
+    GPIO.add_event_detect(PIN_MEM2,GPIO.FALLING, self.on_mem,200)
+    GPIO.add_event_detect(PIN_MEM3,GPIO.FALLING, self.on_mem,200)
+    GPIO.add_event_detect(PIN_MEM4,GPIO.FALLING, self.on_mem,200)
+
     self._reset()
     self._restore()
 
@@ -94,19 +108,31 @@ class DoubleClock(object):
     
   # --- restore clock-values from persistent storage   -----------------------
 
-  def _restore(self):
+  def _restore(self,pin=None):
+    if pin:
+      data_file = os.path.join(DATA_DIR,"mem%d.data" % pin)
+    else:
+      data_file = os.path.join(DATA_DIR,"last.data")
     try:
-      with open(CONF_FILE,"rb") as f:
+      with open(data_file,"rb") as f:
         self._values = pickle.load(f)
     except:
       pass
+    if self._values != [[0,0,0,0],[0,0,0,0]]:
+      self._state = DoubleClock._STATE_READY
+      if pin:
+        self._save()
 
   # --- save clock-values to persistent storage   ----------------------------
 
-  def _save(self):
+  def _save(self,pin=None):
     """ save values - might fail if system is read-only """
+    if pin:
+      data_file = os.path.join(DATA_DIR,"mem%d.data" % pin)
+    else:
+      data_file = os.path.join(DATA_DIR,"last.data")
     try:
-      with open(CONF_FILE,"wb") as f:
+      with open(data_file,"wb") as f:
         pickle.dump(self._values,f)
     except:
       pass
@@ -182,6 +208,7 @@ class DoubleClock(object):
     elif self._state == DoubleClock._STATE_SETUP:
       # reset digits during setup-mode
       self._reset()
+      self._save()
 
     elif self._state == DoubleClock._STATE_READY:
       # start alarms
@@ -225,6 +252,19 @@ class DoubleClock(object):
 
   def on_slider(self,pin):
     self._clock_nr = GPIO.input(PIN_SLIDER_L)
+
+  # --- process memx-buttons   -----------------------------------------------
+
+  def on_mem(self,pin):
+    if self._state == DoubleClock._STATE_SETUP:
+      # save values to mem-pinnr
+      self._save(pin)
+    elif (self._state == DoubleClock._STATE_INIT or
+                                     self._state == DoubleClock._STATE_READY):
+      self._restore(pin)
+    else:
+      # not supported, just buzz
+      self.buzz(*DoubleClock._BUZZ_WARN)
 
   # --- ring the buzzer   ----------------------------------------------------
 
