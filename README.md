@@ -20,6 +20,7 @@ The setup uses the following hardware-components:
   - two TM1637 clock displays
   - one 5-way button for setup
   - one normal button for start/stop
+  - optional up to four normal buttons for save/restore ("memory"-buttons)
   - one slider
   - one active buzzer
 
@@ -52,6 +53,12 @@ To speedup boot-time, disable the keyboard-setup.service. Also, add "quiet"
 to `/boot/cmdline.txt`. Of course you have to do this before the system is
 in readonly-mode.
 
+In readonly-mode, saving the last state and the memory-buttons don't work.
+If you want a readonly-system *and* memory-buttons, create a small
+data-partition, mount it in `/etc/fstab` with the option `sync` and
+replace `/var/lib/doubleclock` with a symbolic link to your mounted
+data-partition.
+
 
 Usage
 -----
@@ -71,6 +78,10 @@ count.
 In alarm-mode, the start/stop-button will stop the buzzer, but not the second
 running clock. Stopping the second alarm will reset the values to the state
 after the last setup.
+
+Pressing a memory-button in setup-mode will save the current values. Pressing
+them in ready-mode will recall the values. Independent of the memory-buttons,
+the clock will save the last values of the clocks.
 
 
 License
