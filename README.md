@@ -84,6 +84,28 @@ them in ready-mode will recall the values. Independent of the memory-buttons,
 the clock will save the last values of the clocks.
 
 
+Case
+----
+
+A case (housing) is work-in-progress. You can find my tinkercad-project
+[here](https://www.tinkercad.com/things/8dUa6ugfUpZ).
+
+The case uses PETG, since PLA is not usable in moist environments like a
+kitchen. Also, care has to be taken that no electronic components get wet
+when water is spilled on the table. Ideally, the clock would be wall-mounted,
+but this is not always possible.
+
+The case should also be easy to open and close, in case a component needs
+to be replaced. There are too many throw-away gadgets out in the wild, which
+stop working only because a wire gets loose and there is no way to open
+the gadget without destroying it.
+
+
+One off the biggest challenges is how to attach the components in a
+stable manner. Most of them have either no support at all, or their
+mounting holes would result in the breakout to be on the outside.
+
+
 License
 -------
 
