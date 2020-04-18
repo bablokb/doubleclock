@@ -29,6 +29,7 @@ PIN_RIGHT     = 23
 PIN_SLIDER_L  = 20
 PIN_START     =  5
 
+# set values to zero if unused
 PIN_MEM1      =  9
 PIN_MEM2      = 25
 PIN_MEM3      = 11
@@ -88,12 +89,10 @@ class DoubleClock(object):
     GPIO.add_event_detect(PIN_SLIDER_L, GPIO.BOTH,       self.on_slider)
     GPIO.add_event_detect(PIN_START,    GPIO.FALLING, self.on_start,200)
 
-    GPIO.setup([PIN_MEM1,PIN_MEM2,PIN_MEM3,PIN_MEM4],
-                                       GPIO.IN,pull_up_down=GPIO.PUD_UP)
-    GPIO.add_event_detect(PIN_MEM1,GPIO.FALLING, self.on_mem,200)
-    GPIO.add_event_detect(PIN_MEM2,GPIO.FALLING, self.on_mem,200)
-    GPIO.add_event_detect(PIN_MEM3,GPIO.FALLING, self.on_mem,200)
-    GPIO.add_event_detect(PIN_MEM4,GPIO.FALLING, self.on_mem,200)
+    for pin in [PIN_MEM1,PIN_MEM2,PIN_MEM3,PIN_MEM4]:
+      if pin:
+        GPIO.setup(pin,GPIO.IN,pull_up_down=GPIO.PUD_UP)
+        GPIO.add_event_detect(pin,GPIO.FALLING, self.on_mem,200)
 
     self._reset()
     self._restore()
