@@ -28,6 +28,12 @@ The setup uses the following hardware-components:
 
 You can find details on the necessary wiring in `doc/specs.md`.
 
+This is a prototype using a
+[https://github.com/bablokb/pi-proto-hat](https://github.com/bablokb/pi-proto-hat)
+as basis:
+
+![](doc/prototype.jpg)
+
 
 Software
 --------
