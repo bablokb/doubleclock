@@ -34,6 +34,10 @@ as basis:
 
 ![](doc/prototype.jpg)
 
+Final version of the case:
+
+![](doc/case-final.jpg)
+
 
 Software
 --------
@@ -93,8 +97,10 @@ the clock will save the last values of the clocks.
 Case
 ----
 
-A case (housing) is work-in-progress. You can find my tinkercad-project
-[here](https://www.tinkercad.com/things/8dUa6ugfUpZ).
+A case (housing) is now available. You can find my tinkercad-project with various parts
+[here](https://www.tinkercad.com/things/8dUa6ugfUpZ). You probably need to adapt the
+individual parts to your specific components (e.g. to the dimension of your
+slider-switch).
 
 The case uses PETG, since PLA is not usable in moist environments like a
 kitchen. Also, care has to be taken that no electronic components get wet
@@ -104,8 +110,10 @@ but this is not always possible.
 The case should also be easy to open and close, in case a component needs
 to be replaced. There are too many throw-away gadgets out in the wild, which
 stop working only because a wire gets loose and there is no way to open
-the gadget without destroying it.
+the gadget without destroying it. The current case design does not fully meet
+these goals.
 
+![](doc/case-open.jpg)
 
 One off the biggest challenges is how to attach the components in a
 stable manner. Most of them have either no support at all, or their
